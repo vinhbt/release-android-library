@@ -1,16 +1,18 @@
 release-android-library
 =======================
 
-Remote script to create a maven compatible release of an android library (aar). This release comes in a zip or exploded form and is only created locally inside your own build folder. You can these use these files to release to JCenter or Maven Central.
+Remote script to create a maven compatible release of an android library (aar or jar) with optional dependency support.
 
-Matching blog post here: [blog.blundell-apps.com/locally-release-an-android-library-for-jcenter-or-maven-central-inclusion/](http://blog.blundell-apps.com/locally-release-an-android-library-for-jcenter-or-maven-central-inclusion/)
+This release comes in a zip or exploded form and is only created locally inside your own build folder. You can these use these files to release to JCenter or Maven Central.
+
+Matching blog post: [Publish Android library to BinTray (JCenter), AAR vs. JAR and optional dependency](http://theartofdev.com/2015/02/19/publish-android-library-to-bintray-jcenter-aar-vs-jar-and-optional-dependency/), update to original blog post by Blundell: [Locally release an Android Library for JCenter or Maven Central inclusion](http://blog.blundell-apps.com/locally-release-an-android-library-for-jcenter-or-maven-central-inclusion/).
 
 ####adding to your library
 ```
 apply plugin: 'com.android.library'
 
 ext {
-    PUBLISH_GROUP_ID = 'com.blundell'
+    PUBLISH_GROUP_ID = 'com.namespace'
     PUBLISH_ARTIFACT_ID = 'example-library-name'
     PUBLISH_VERSION = '1.0.0'
 }
@@ -19,24 +21,23 @@ android {
     // configs, flavors etc
 }
 
+// for AAR package
+apply from: 'https://raw.githubusercontent.com/ArthurHub/release-android-library/master/android-release-aar.gradle'
+
+// or JAR package
+apply from: 'https://raw.githubusercontent.com/ArthurHub/release-android-library/master/android-release-jar.gradle'
+
 dependencies {
     // dependencies
+    // optional dependencies
 }
-
-// Copy the file locally and use
-apply from: 'android-release-aar.gradle'
-// or use the remote copy to keep update with latest changes
-apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
 ```
-
 
 ####useage
 
 `./gradlew clean build generateRelease`
 
 ####example output
-
-
 ```
  :engine:zipRelease
  :engine:generateRelease
